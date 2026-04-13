@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* TRIPS Bike Annotation - Junctions Modal                                    */
+/* TRIPS Bike Annotation - Junction Modal                                    */
 /* -------------------------------------------------------------------------- */
 
 import React, { useState } from 'react';
