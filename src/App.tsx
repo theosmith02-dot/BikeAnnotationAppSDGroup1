@@ -5,7 +5,7 @@
 
 /* App.tsx: Main Entry Point, Global State, Video Sync, and Layout Grid       */
 /* -------------------------------------------------------------------------- */
-/* new comment*/
+
 
 import React, { useState, useRef } from 'react';
 import { Annotation, AnnotationType, GPSPoint, ActiveStates } from './types';
