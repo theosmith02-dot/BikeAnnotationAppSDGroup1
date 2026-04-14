@@ -6,6 +6,7 @@
 /* App.tsx: Main Entry Point, Global State, Video Sync, and Layout Grid       */
 /* -------------------------------------------------------------------------- */
 /*Jack Git test*/
+/*Theo approves*/
 
 
 import React, { useState, useRef } from 'react';
