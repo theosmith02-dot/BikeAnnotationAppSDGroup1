@@ -128,7 +128,7 @@ const SessionSetupModal: React.FC<SessionSetupModalProps> = ({ onStart, onClose,
               }`}>
                 <MapIcon className={`w-6 h-6 mx-auto mb-2 ${dataFile ? 'text-indigo-400' : 'text-slate-500'}`} />
                 <span className="text-[11px] font-bold block text-slate-300">
-                  {dataFile ? dataFile.name : 'Click to upload telemetry'}
+                  {dataFile ? dataFile.name : 'Click to upload GPS OR .trips file'}
                 </span>
               </div>
             </div>
