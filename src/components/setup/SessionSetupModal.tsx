@@ -100,7 +100,7 @@ const SessionSetupModal: React.FC<SessionSetupModalProps> = ({ onStart, onClose,
               type="text"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              placeholder="e.g. Theo Smith"
+              placeholder="UserID"
               className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 focus:border-indigo-500 outline-none transition-all"
             />
           </div>
