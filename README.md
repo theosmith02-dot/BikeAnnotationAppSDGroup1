@@ -1,5 +1,5 @@
 
-#### **TRIPS Bike Annotation Software - Senior Design Group 1**
+# **TRIPS Bike Annotation Software - Senior Design Group 1**
 ## Team Members:
 * **Theo Smith (Electrical Engineering - Computer)**
 * **Jack Eyrich (Computer Science Engineerng)**
