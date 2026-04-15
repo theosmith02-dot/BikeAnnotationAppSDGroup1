@@ -1,13 +1,12 @@
-/* -------------------------------------------------------------------------- */
-/*         **TRIPS Bike Annotation Software - Senior Design Group 1**         */
-/* Team Members:                                                              */
-/*  -- Theo Smith (Electrical Engineering - Computer)                         */
-/*  -- Jack Eyrich (Computer Science Engineerng)                              */
-/*  -- Anthony Roti (Electrical Engineering - Electrical)                     */
-/* Sponsors:                                                                  */
-/*  -- Cara Hamann (Department of Epidemiology)                               */
-/*  -- Tyler Bell (Department of Electrical and Computer Engineering)         */
-/* -------------------------------------------------------------------------- */
+
+#### **TRIPS Bike Annotation Software - Senior Design Group 1**
+## Team Members:
+* **Theo Smith (Electrical Engineering - Computer)**
+* **Jack Eyrich (Computer Science Engineerng)**
+* **Anthony Roti (Electrical Engineering - Electrical)**
+## **Sponsors:**
+* **Cara Hamann (Department of Epidemiology)**
+* **Tyler Bell (Department of Electrical and Computer Engineering)**
 
 ## 🚲 Project Overview
 Our high-performance web application is designed for the University of Iowa TRIPS
