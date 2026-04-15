@@ -252,7 +252,7 @@ const App: React.FC = () => {
           />
         </div>
         
-        <div className="absolute top-[270px] right-8 w-[calc(33.33%-3rem)] h-[calc(100%-470px)] z-30">
+        <div className="absolute top-[285px] right-8 w-[calc(33.33%-3rem)] h-[calc(100%-460px)] z-30">
           <MapView gpsData={gpsData} currentTime={currentTime} isAutoCentering={isAutoCentering} setIsAutoCentering={setIsAutoCentering} />
         </div>
       </div>
