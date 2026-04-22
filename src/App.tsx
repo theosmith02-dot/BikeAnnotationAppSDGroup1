@@ -6,6 +6,13 @@
 /* App.tsx: Main Entry Point, Global State, Video Sync, and Layout Grid       */
 /* -------------------------------------------------------------------------- */
 
+/* -------------------------------------------------------------------------- */
+/* TRIPS Bike Annotation Software - Senior Design Group 1                     */
+/* Team Members: Theo Smith (EE), Jack Eyrich (CSE), Anthony Roti (EE)        */
+/* Latest Revision: 4/22/2026                                                 */
+/* */
+/* App.tsx: Main Entry Point, Global State, Video Sync, and Layout Grid       */
+/* -------------------------------------------------------------------------- */
 
 import React, { useState, useRef } from 'react';
 import { Annotation, AnnotationType, GPSPoint, ActiveStates } from './types';
@@ -36,6 +43,7 @@ const App: React.FC = () => {
   const [frontVideo, setFrontVideo] = useState<{ url: string } | null>(null);
   const [backVideo, setBackVideo] = useState<{ url: string } | null>(null);
   const [gpsData, setGpsData] = useState<GPSPoint[]>([]);
+  const [sessionFingerprint, setSessionFingerprint] = useState<string>(''); 
 
   /* --- 2. UI & PLAYBACK STATE --- */
   const [isPlaying, setIsPlaying] = useState(false);
@@ -184,9 +192,11 @@ const App: React.FC = () => {
     back: File | null, 
     gps: GPSPoint[], 
     imported?: Annotation[], 
-    id?: string
+    id?: string,
+    fingerprint?: string
   ) => {
     if (id) setUserId(id);
+    if (fingerprint) setSessionFingerprint(fingerprint);
     if (front instanceof File) setFrontVideo({ url: URL.createObjectURL(front) });
     if (back instanceof File) setBackVideo({ url: URL.createObjectURL(back) });
     setGpsData(gps);
@@ -202,7 +212,15 @@ const App: React.FC = () => {
     setCurrentTime(0);
   };
 
-  if (showSetup) return <SessionSetupModal onStart={handleStartSession} onClose={() => setShowSetup(false)} isResuming={frontVideo !== null} />;
+  if (showSetup) {
+    return (
+      <SessionSetupModal 
+        onStart={handleStartSession} 
+        onClose={() => setShowSetup(false)} 
+        isResuming={frontVideo !== null} 
+      />
+    );
+  }
 
   return (
     <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden font-sans">
@@ -218,40 +236,80 @@ const App: React.FC = () => {
 
       <div className="flex-1 flex flex-col relative overflow-hidden">
         <Header 
-          userId={userId} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen}
-          onSaveWorkspace={() => saveWorkspaceFile(gpsData)} onNewSession={() => setShowSetup(true)}
-          onExportCSV={() => exportToCSV(gpsData)} isSwapped={isSwapped} setIsSwapped={setIsSwapped}
-          isMuted={isMuted} setIsMuted={setIsMuted} currentTime={currentTime} formatTime={formatTime}
-          playbackRate={playbackRate} onPlaybackRateChange={setPlaybackRate}
+          userId={userId} 
+          sidebarOpen={sidebarOpen} 
+          setSidebarOpen={setSidebarOpen}
+          onSaveWorkspace={() => saveWorkspaceFile(gpsData, sessionFingerprint)} 
+          onNewSession={() => setShowSetup(true)}
+          onExportCSV={() => exportToCSV(gpsData)} 
+          isSwapped={isSwapped} 
+          setIsSwapped={setIsSwapped}
+          isMuted={isMuted} 
+          setIsMuted={setIsMuted} 
+          currentTime={currentTime} 
+          formatTime={formatTime}
+          playbackRate={playbackRate} 
+          onPlaybackRateChange={setPlaybackRate}
         />
 
         <div className="flex-1 flex flex-col p-4 space-y-4 overflow-hidden">
           <VideoPlayer 
-            ref={videoPlayerRef} frontUrl={frontVideo?.url} backUrl={backVideo?.url}
-            currentTime={currentTime} duration={duration} isPlaying={isPlaying}
-            isMuted={isMuted} isSwapped={isSwapped} playbackRate={playbackRate} activeStates={activeStates}
-            onTimeUpdate={setCurrentTime} onDurationChange={setDuration}
-            onTogglePlay={() => setIsPlaying(!isPlaying)} onSeek={(t) => { videoPlayerRef.current?.syncAll(t); setCurrentTime(t); }}
+            ref={videoPlayerRef} 
+            frontUrl={frontVideo?.url} 
+            backUrl={backVideo?.url}
+            currentTime={currentTime} 
+            duration={duration} 
+            isPlaying={isPlaying}
+            isMuted={isMuted} 
+            isSwapped={isSwapped} 
+            playbackRate={playbackRate} 
+            activeStates={activeStates}
+            onTimeUpdate={setCurrentTime} 
+            onDurationChange={setDuration}
+            onTogglePlay={() => setIsPlaying(!isPlaying)} 
+            onSeek={(t) => { videoPlayerRef.current?.syncAll(t); setCurrentTime(t); }}
           />
 
           <ActionCenter 
-            activeStates={activeStates} pendingAnnotation={pendingAnnotation} pendingNote={pendingNote}
-            setPendingNote={setPendingNote} setPendingAnnotation={setPendingAnnotation}
+            activeStates={activeStates} 
+            pendingAnnotation={pendingAnnotation} 
+            pendingNote={pendingNote}
+            setPendingNote={setPendingNote} 
+            setPendingAnnotation={setPendingAnnotation}
             onUpdateState={handleUpdateState} 
-            onActionClick={(type, val, col) => { setIsPlaying(false); const frame = captureFrame(); if(frame) setPendingAnnotation({...frame, type, value: val, color: col}); }} 
+            onActionClick={(type, val, col) => { 
+              setIsPlaying(false); 
+              const frame = captureFrame(); 
+              if(frame) setPendingAnnotation({...frame, type, value: val, color: col}); 
+            }} 
             onOpenCriticalPointPicker={() => { setIsPlaying(false); setShowPicker(true); }}
             onOpenRecklessModal={() => { setIsPlaying(false); setActiveModal('reckless'); }}
             onSaveAnnotation={() => {
               const context = `[W:${activeStates.weather || '?'}, P:${activeStates.path || '?'}, S:${activeStates.surface || '?'}, H:${activeStates.helmet || '?'}]`;
-              const newAnn = { id: crypto.randomUUID(), timestamp: pendingAnnotation.timestamp, formattedTime: formatTime(pendingAnnotation.timestamp), type: pendingAnnotation.type, value: pendingAnnotation.value, note: pendingNote ? `${context} ${pendingNote}` : context, screenshot: pendingAnnotation.screenshot, color: pendingAnnotation.color };
+              const newAnn: Annotation = { 
+                id: crypto.randomUUID(), 
+                timestamp: pendingAnnotation.timestamp, 
+                formattedTime: formatTime(pendingAnnotation.timestamp), 
+                type: pendingAnnotation.type, 
+                value: pendingAnnotation.value, 
+                note: pendingNote ? `${context} ${pendingNote}` : context, 
+                screenshot: pendingAnnotation.screenshot, 
+                color: pendingAnnotation.color 
+              };
               setAnnotations(prev => [...prev, newAnn].sort((a,b) => a.timestamp - b.timestamp));
-              setPendingAnnotation(null); setPendingNote('');
+              setPendingAnnotation(null); 
+              setPendingNote('');
             }}
           />
         </div>
         
         <div className="absolute top-[285px] right-8 w-[calc(33.33%-3rem)] h-[calc(100%-460px)] z-30">
-          <MapView gpsData={gpsData} currentTime={currentTime} isAutoCentering={isAutoCentering} setIsAutoCentering={setIsAutoCentering} />
+          <MapView 
+            gpsData={gpsData} 
+            currentTime={currentTime} 
+            isAutoCentering={isAutoCentering} 
+            setIsAutoCentering={setIsAutoCentering} 
+          />
         </div>
       </div>
 
@@ -267,10 +325,38 @@ const App: React.FC = () => {
         />
       )}
 
-      {activeModal === 'junction' && <JunctionModal onClose={closeModals} onSave={(d) => saveComplexModalData('Critical Point - Junction', AnnotationType.GENERAL, d, 'purple')} defaults={isEditing ? parseDefaults(editingId!) : {}} isEditing={isEditing} />}
-      {activeModal === 'lane' && <LaneChangeModal onClose={closeModals} onSave={(d) => saveComplexModalData('Critical Point - Lane Change', AnnotationType.GENERAL, d, 'purple')} defaults={isEditing ? parseDefaults(editingId!) : {}} isEditing={isEditing} />}
-      {activeModal === 'reckless' && <RecklessModal onClose={closeModals} onSave={(d) => saveComplexModalData('Reckless Behavior', AnnotationType.RECKLESS, d, 'red')} defaults={isEditing ? parseDefaults(editingId!) : {}} isEditing={isEditing} />}
-      {activeModal === 'hazard' && <HazardModal onClose={closeModals} onSave={(d) => saveComplexModalData('Critical Point - Hazard', AnnotationType.GENERAL, d, 'purple')} defaults={isEditing ? parseDefaults(editingId!) : {}} isEditing={isEditing} />}
+      {activeModal === 'junction' && (
+        <JunctionModal 
+          onClose={closeModals} 
+          onSave={(d) => saveComplexModalData('Critical Point - Junction', AnnotationType.GENERAL, d, 'purple')} 
+          defaults={isEditing ? parseDefaults(editingId!) : {}} 
+          isEditing={isEditing} 
+        />
+      )}
+      {activeModal === 'lane' && (
+        <LaneChangeModal 
+          onClose={closeModals} 
+          onSave={(d) => saveComplexModalData('Critical Point - Lane Change', AnnotationType.GENERAL, d, 'purple')} 
+          defaults={isEditing ? parseDefaults(editingId!) : {}} 
+          isEditing={isEditing} 
+        />
+      )}
+      {activeModal === 'reckless' && (
+        <RecklessModal 
+          onClose={closeModals} 
+          onSave={(d) => saveComplexModalData('Reckless Behavior', AnnotationType.RECKLESS, d, 'red')} 
+          defaults={isEditing ? parseDefaults(editingId!) : {}} 
+          isEditing={isEditing} 
+        />
+      )}
+      {activeModal === 'hazard' && (
+        <HazardModal 
+          onClose={closeModals} 
+          onSave={(d) => saveComplexModalData('Critical Point - Hazard', AnnotationType.GENERAL, d, 'purple')} 
+          defaults={isEditing ? parseDefaults(editingId!) : {}} 
+          isEditing={isEditing} 
+        />
+      )}
     </div>
   );
 };

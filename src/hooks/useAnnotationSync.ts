@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 
 import { useState, useCallback } from 'react';
-import { Annotation, GPSPoint } from '../types';
+import { Annotation, GPSPoint, ProjectData } from '../types';
 
 export const useAnnotationSync = (userId: string) => {
   const [annotations, setAnnotations] = useState<Annotation[]>([]);
@@ -20,22 +20,17 @@ export const useAnnotationSync = (userId: string) => {
   }, []);
 
   /**
-   * UPDATED: Filename Generator
+   * Filename Generator
    * Format: [User]_[MM-DD-YYYY]_[HH-mm-ss]_[Suffix].ext
    */
   const getFormattedFileName = useCallback((suffix: string) => {
     const now = new Date();
-    
-    // Date components
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     const dd = String(now.getDate()).padStart(2, '0');
     const yyyy = now.getFullYear();
-    
-    // Time components (24hr format for better sorting)
     const hh = String(now.getHours()).padStart(2, '0');
     const min = String(now.getMinutes()).padStart(2, '0');
     const ss = String(now.getSeconds()).padStart(2, '0');
-    
     const id = userId.replace(/\s+/g, '-').toLowerCase() || 'anonymous';
     
     return `${id}_${mm}-${dd}-${yyyy}_${hh}-${min}-${ss}_${suffix}`;
@@ -85,10 +80,8 @@ export const useAnnotationSync = (userId: string) => {
       const writable = await handle.createWritable();
       await writable.write(content);
       await writable.close();
-
     } catch (err: any) {
       if (err.name === 'AbortError') return;
-      
       console.warn("Save Picker failed, falling back to Downloads folder.");
       const blob = new Blob([content], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
@@ -111,7 +104,6 @@ export const useAnnotationSync = (userId: string) => {
     const rows = annotations.map((ann) => {
       const coords = getCoordinatesAtTime(ann.timestamp, gpsData);
       const details = parseNoteDetails(ann.note);
-      
       let displayType = ann.type as string;
       if (ann.value.startsWith('Critical Point')) displayType = 'Critical';
 
@@ -132,14 +124,15 @@ export const useAnnotationSync = (userId: string) => {
 
     const csvContent = [dynamicHeaders, ...rows].map((e) => e.join(',')).join('\n');
     const name = getFormattedFileName('annotations.csv');
-    
     await saveWithSystemDialog(csvContent, name, 'csv');
   }, [annotations, getFormattedFileName]);
 
-  const saveWorkspaceFile = useCallback(async (gpsData: GPSPoint[]) => {
-    const projectData = {
+  /* UPDATED: Added fingerprint parameter to capture the session lock */
+  const saveWorkspaceFile = useCallback(async (gpsData: GPSPoint[], fingerprint: string) => {
+    const projectData: ProjectData = {
       version: '1.2',
       userId,
+      fingerprint, // This saves the 'lock' into the JSON
       annotations,
       gpsData,
       exportDate: new Date().toISOString()

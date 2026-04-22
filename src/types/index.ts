@@ -38,6 +38,7 @@ export interface ActiveStates {
 export interface ProjectData {
   version: string;
   userId: string;
+  fingerprint: string; // Added: Unique ID matching the specific media files
   annotations: Annotation[];
   gpsData: GPSPoint[];
   exportDate: string;

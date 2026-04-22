@@ -2,11 +2,11 @@
 /* TRIPS Bike Annotation - Header & Playback Controls                         */
 /* -------------------------------------------------------------------------- */
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Shield, Save, RefreshCcw, Download, 
   ArrowLeftRight, Volume2, VolumeX, History,
-  ChevronDown
+  ChevronDown, Menu
 } from 'lucide-react';
 
 interface HeaderProps {
@@ -22,7 +22,6 @@ interface HeaderProps {
   setIsMuted: (muted: boolean) => void;
   currentTime: number;
   formatTime: (seconds: number) => string;
-  // New Speed Props
   playbackRate: number;
   onPlaybackRateChange: (rate: number) => void;
 }
@@ -44,6 +43,19 @@ const Header: React.FC<HeaderProps> = ({
   onPlaybackRateChange
 }) => {
   const [showSpeedMenu, setShowSpeedMenu] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
+  const dashboardRef = useRef<HTMLDivElement>(null);
+
+  // Close dashboard when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dashboardRef.current && !dashboardRef.current.contains(event.target as Node)) {
+        setShowDashboard(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   return (
     <header className="h-14 border-b border-slate-800 bg-slate-950 flex items-center justify-between px-6 z-50">
@@ -64,26 +76,51 @@ const Header: React.FC<HeaderProps> = ({
 
       {/* Action Buttons Section */}
       <div className="flex items-center gap-3">
-        <HeaderButton 
-          onClick={onSaveWorkspace} 
-          icon={<Save className="w-3 h-3" />} 
-          label="Save .trips" 
-          variant="green" 
-        />
+        
+        {/* 3-Line Dashboard Menu */}
+        <div className="relative" ref={dashboardRef}>
+          <button 
+            onClick={() => setShowDashboard(!showDashboard)}
+            className={`p-2 rounded-lg border transition-all ${
+              showDashboard 
+                ? 'bg-indigo-600 border-indigo-500 text-white' 
+                : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700'
+            }`}
+            title="Session Dashboard"
+          >
+            <Menu className="w-4 h-4" />
+          </button>
 
-        <HeaderButton 
-          onClick={onNewSession} 
-          icon={<RefreshCcw className="w-3 h-3" />} 
-          label="New Session" 
-          variant="slate" 
-        />
-
-        <HeaderButton 
-          onClick={onExportCSV} 
-          icon={<Download className="w-3 h-3" />} 
-          label="Export CSV" 
-          variant="indigo" 
-        />
+          {showDashboard && (
+            <div className="absolute top-full left-0 mt-2 flex flex-col bg-slate-900 border border-slate-700 rounded-xl overflow-hidden shadow-2xl min-w-[160px] z-[60]">
+              <div className="px-3 py-1.5 text-[8px] font-black uppercase tracking-widest text-slate-500 border-b border-slate-800 bg-slate-950">
+                Session Controls
+              </div>
+              <button 
+                onClick={() => { onSaveWorkspace(); setShowDashboard(false); }}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 text-slate-300 transition-colors text-[10px] font-bold"
+              >
+                <Save className="w-3.5 h-3.5 text-green-500" />
+                <span>Save .trips</span>
+              </button>
+              <button 
+                onClick={() => { onExportCSV(); setShowDashboard(false); }}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-slate-800 text-slate-300 transition-colors text-[10px] font-bold"
+              >
+                <Download className="w-3.5 h-3.5 text-indigo-500" />
+                <span>Export CSV</span>
+              </button>
+              <div className="h-px bg-slate-800" />
+              <button 
+                onClick={() => { onNewSession(); setShowDashboard(false); }}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-red-950/30 text-red-400 transition-colors text-[10px] font-bold"
+              >
+                <RefreshCcw className="w-3.5 h-3.5" />
+                <span>New Session</span>
+              </button>
+            </div>
+          )}
+        </div>
 
         <HeaderButton 
           onClick={() => setIsSwapped(!isSwapped)} 
