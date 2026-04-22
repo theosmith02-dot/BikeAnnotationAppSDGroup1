@@ -2,7 +2,7 @@
 /* TRIPS Bike Annotation - Action Center                                      */
 /* -------------------------------------------------------------------------- */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   AlertTriangle, Split, Plus, X, CornerDownRight, 
   Droplets, Map as MapIcon, HardHat 
@@ -85,7 +85,6 @@ const ActionCenter: React.FC<ActionCenterProps> = ({
       ) : (
         /* --- DEFAULT IDLE VIEW (Selectors & Buttons) --- */
         <div className="flex-1 flex flex-col gap-3">
-          {/* Continuous State Selectors */}
           <div className="flex items-center gap-4 border-b border-slate-800 pb-2">
             <StateSelector 
               label="Weather" 
@@ -120,7 +119,6 @@ const ActionCenter: React.FC<ActionCenterProps> = ({
             />
           </div>
 
-          {/* Quick Action Buttons */}
           <div className="flex gap-3 justify-between items-center">
             <div className="flex gap-3">
               <QuickActionBtn
@@ -163,22 +161,63 @@ const StateSelector: React.FC<{
   onChange: (v: string) => void;
   icon?: React.ReactNode;
   colorClass: string;
-}> = ({ label, value, options, onChange, icon, colorClass }) => (
-  <div className="flex items-center gap-2 border-r border-slate-800 last:border-0 pr-4">
-    {icon}
-    <span className="text-[8px] font-black text-slate-500 uppercase">{label}:</span>
-    <select
-      className={`bg-transparent text-[9px] font-bold outline-none cursor-pointer ${value ? colorClass : 'text-slate-500 italic'}`}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-    >
-      <option value="" disabled className="bg-slate-900 text-slate-500">Select...</option>
-      {options.map(opt => (
-        <option key={opt} value={opt} className="bg-slate-900 text-slate-200">{opt}</option>
-      ))}
-    </select>
-  </div>
-);
+}> = ({ label, value, options, onChange, icon, colorClass }) => {
+  const [isOther, setIsOther] = useState(false);
+  const [otherValue, setOtherValue] = useState('');
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const val = e.target.value;
+    if (val === 'OTHER_TRIGGER') {
+      setIsOther(true);
+    } else {
+      setIsOther(false);
+      onChange(val);
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-2 border-r border-slate-800 last:border-0 pr-4 h-6">
+      {icon}
+      <span className="text-[8px] font-black text-slate-500 uppercase">{label}:</span>
+      
+      {isOther ? (
+        <div className="flex items-center gap-1 animate-in fade-in slide-in-from-left-1">
+          <input 
+            autoFocus
+            type="text"
+            className={`bg-slate-800 border border-slate-700 rounded px-1.5 py-0.5 text-[9px] font-bold outline-none focus:border-indigo-500 ${colorClass} w-20`}
+            placeholder="Type..."
+            value={otherValue}
+            onChange={(e) => setOtherValue(e.target.value)}
+            onBlur={() => otherValue && onChange(`Other: ${otherValue}`)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && otherValue) {
+                onChange(`Other: ${otherValue}`);
+                setIsOther(false);
+              }
+              if (e.key === 'Escape') setIsOther(false);
+            }}
+          />
+          <button onClick={() => setIsOther(false)} className="text-slate-600 hover:text-white">
+            <X size={10} />
+          </button>
+        </div>
+      ) : (
+        <select
+          className={`bg-transparent text-[9px] font-bold outline-none cursor-pointer ${value ? colorClass : 'text-slate-500 italic'}`}
+          value={value.startsWith('Other:') ? 'OTHER_TRIGGER' : value}
+          onChange={handleSelectChange}
+        >
+          <option value="" disabled className="bg-slate-900 text-slate-500">Select...</option>
+          {options.map(opt => (
+            <option key={opt} value={opt} className="bg-slate-900 text-slate-200">{opt}</option>
+          ))}
+          <option value="OTHER_TRIGGER" className="bg-slate-900 text-indigo-400 font-bold">Other...</option>
+        </select>
+      )}
+    </div>
+  );
+};
 
 const QuickActionBtn: React.FC<{
   onClick: () => void;
