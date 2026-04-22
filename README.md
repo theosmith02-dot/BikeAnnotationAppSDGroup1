@@ -2,26 +2,26 @@
 # **TRIPS Bike Annotation Software - Senior Design Group 1**
 ## Team Members:
 * **Theo Smith (Electrical Engineering - Computer)**
-* **Jack Eyrich (Computer Science Engineerng)**
+* **Jack Eyrich (Computer Science Engineering)**
 * **Anthony Roti (Electrical Engineering - Electrical)**
 ## **Sponsors:**
 * **Cara Hamann (Department of Epidemiology)**
 * **Tyler Bell (Department of Electrical and Computer Engineering)**
 
-## 🚲 Project Overview
+## Project Overview
 Our high-performance web application is designed for the University of Iowa TRIPS
 Lab. The primary objective was to modernize and replace the lab's bulky and outdated
 annotation software. This software provides researchers with a streamlined, responsive
 interface that synchronizes bicycle-mounted video and GPS data. This allows for
 efficient identification and classification of bike safety events and road hazards.
 
-## 🔄 Modernizing the Workflow
+## Modernizing the Workflow
 The previous C# version had a limited accesibility, low maintainability, and an
 outdated UI/UX (very rigid layout, windows widgets, etc). Our solution provides
 universal access (via any modern web browser URL), clean modular components using
 TypeScript, streamlined maintenance (instant updates via git commit/push).
 
-## 🚀 Key Features and Technical Highlights
+## Key Features and Technical Highlights
 * **Web-Based Interface:** Accessible to all students and lab members without requiring
 any software installation.
 * **Automated Data Processing:** Instant parsing of CSV data extracted from the video,
@@ -31,7 +31,7 @@ All of the sensitive research data never leaves the local machine.
 * **Integration**: The backend logic, using Node.js and Vite, provides a foundation for
 future integration with automated AI/ML classification if needed.
 
-## 🛠 Tech Stack
+## Tech Stack
 * **Framework:** React 18
 * **Language:** TypeScript
 * **Mapping:** Leaflet & React-Leaflet
@@ -39,7 +39,7 @@ future integration with automated AI/ML classification if needed.
 * **Styling:** Tailwind CSS
 * **Hosting:** Vercel (connected to GitHub)
 
-## 📋 Operational Workflow (User Guide)
+## Operational Workflow (User Guide)
 Follow these steps to conduct and annotation session using the interface:
 
 1) **Data Ingestion / Session Setup**
@@ -64,3 +64,36 @@ more specific information from the annotator.
     * Generate a .trips file if you would like to continue your annotations later
     - This saves all the progress you have made (just start a new session and upload the
     same videos you were working with along with this .trips file and everything will load properly
+
+## Folder Structure
+Our folder layout is seen below. Follow this to find each file and exactly what function in corresponds to. Think of this as a guide for when edits are made and you need to find which file to edit.
+```text
+root/
+├── public/                
+├── src/                   
+│   ├── App.tsx            # The main "brain" - sets up the layout and holds everything together
+│   ├── main.tsx           # The starting point that tells the browser to run our React code
+│   ├── types.ts           # A list of "rules" that makes sure our data doesn't get messy
+│   ├── components/        # All the different parts of the screen
+│   │   ├── annotations/   # The tools for tagging hazards
+│   │   │   ├── ActionCenter.tsx       # The buttons you click while watching the video
+│   │   │   └── modals/                # The popups that appear when you tag something
+│   │   │       ├── CriticalPointPickerModal.tsx  # For marking the exact event
+│   │   │       ├── HazardModal.tsx               # For picking what kind of danger happened
+│   │   │       ├── JunctionModal.tsx             # Specifically for intersections
+│   │   │       ├── LaneChangeModal.tsx           # For tagging swerving or lane shifts
+│   │   │       └── RecklessModal.tsx             # For tagging crazy driving behavior
+│   │   ├── layout/        # The "frame" of the app
+│   │   │   ├── Header.tsx             # The top bar with the title and branding
+│   │   │   └── Sidebar.tsx            # The list on the side showing the tags you've made
+│   │   ├── map/           # Everything to do with the map
+│   │   │   └── MapView.tsx            # The interactive map that shows the bike's path
+│   │   ├── setup/         # Getting the session ready
+│   │   │   └── SessionSetupModal.tsx  # The first screen where you upload videos and GPS logs
+│   │   ├── ui/            # Reusable bits and pieces
+│   │   │   └── ModalElements.tsx      # Standardized styling so all the popups look the same
+│   │   └── video/         # The media player
+│   │       └── VideoPlayer.tsx        # The custom video player that stays in sync with the map
+├── index.html             # The basic HTML shell of the website
+├── README.md              # This file!
+└── tsconfig.json          # The settings file for the code compiler
