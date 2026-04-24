@@ -6,14 +6,6 @@
 /* App.tsx: Main Entry Point, Global State, Video Sync, and Layout Grid       */
 /* -------------------------------------------------------------------------- */
 
-/* -------------------------------------------------------------------------- */
-/* TRIPS Bike Annotation Software - Senior Design Group 1                     */
-/* Team Members: Theo Smith (EE), Jack Eyrich (CSE), Anthony Roti (EE)        */
-/* Latest Revision: 4/22/2026                                                 */
-/* */
-/* App.tsx: Main Entry Point, Global State, Video Sync, and Layout Grid       */
-/* -------------------------------------------------------------------------- */
-
 import React, { useState, useRef } from 'react';
 import { Annotation, AnnotationType, GPSPoint, ActiveStates } from './types';
 
