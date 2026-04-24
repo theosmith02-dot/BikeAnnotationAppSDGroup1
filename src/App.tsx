@@ -306,9 +306,11 @@ const App: React.FC = () => {
         <div className="absolute top-[285px] right-8 w-[calc(33.33%-3rem)] h-[calc(100%-460px)] z-30">
           <MapView 
             gpsData={gpsData} 
+            annotations={annotations}
             currentTime={currentTime} 
             isAutoCentering={isAutoCentering} 
             setIsAutoCentering={setIsAutoCentering} 
+            onSeek={(t) => { videoPlayerRef.current?.syncAll(t); setCurrentTime(t);}}
           />
         </div>
       </div>
