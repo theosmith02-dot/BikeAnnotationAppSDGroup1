@@ -8,7 +8,9 @@ export enum AnnotationType {
   WEATHER = 'WEATHER',
   SURFACE = 'SURFACE',
   HELMET = 'HELMET',
-  RECKLESS = 'RECKLESS'
+  RECKLESS = 'RECKLESS',
+  CRITICAL_POINT = 'CRITICAL POINT',
+  STATE_CHANGE = 'STATE CHANGES'
 }
 
 export interface GPSPoint {
