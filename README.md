@@ -86,29 +86,29 @@ Our folder layout is seen below. Follow this to find each file and exactly what 
 root/
 ├── public/                
 ├── src/                   
-│   ├── App.tsx            # The main "brain" - sets up the layout and holds everything together
-│   ├── main.tsx           # The starting point that tells the browser to run our React code
-│   ├── types.ts           # A list of "rules" that makes sure our data doesn't get messy
+│   ├── App.tsx            # The main "brain" - sets up the layout
+│   ├── main.tsx           # The starting point
+│   ├── types.ts           # A list of "rules"
 │   ├── components/        # All the different parts of the screen
 │   │   ├── annotations/   # The tools for tagging hazards
-│   │   │   ├── ActionCenter.tsx       # The buttons you click while watching the video
-│   │   │   └── modals/                # The popups that appear when you tag something
-│   │   │       ├── CriticalPointPickerModal.tsx  # For marking the exact event
-│   │   │       ├── HazardModal.tsx               # For picking what kind of danger happened
-│   │   │       ├── JunctionModal.tsx             # Specifically for intersections
-│   │   │       ├── LaneChangeModal.tsx           # For tagging swerving or lane shifts
-│   │   │       └── RecklessModal.tsx             # For tagging crazy driving behavior
+│   │   │   ├── ActionCenter.tsx       # The buttons you click
+│   │   │   └── modals/                # The popups that appear
+│   │   │       ├── CriticalPointPickerModal.tsx  # For marking event
+│   │   │       ├── HazardModal.tsx               # For picking danger
+│   │   │       ├── JunctionModal.tsx             # For intersections
+│   │   │       ├── LaneChangeModal.tsx           # For lane shifts
+│   │   │       └── RecklessModal.tsx             # For reckless driving
 │   │   ├── layout/        # The "frame" of the app
-│   │   │   ├── Header.tsx             # The top bar with the title and branding
-│   │   │   └── Sidebar.tsx            # The list on the side showing the tags you've made
+│   │   │   ├── Header.tsx             # The top bar with the title
+│   │   │   └── Sidebar.tsx            # The list of events on side
 │   │   ├── map/           # Everything to do with the map
-│   │   │   └── MapView.tsx            # The interactive map that shows the bike's path
+│   │   │   └── MapView.tsx            # The map showing path
 │   │   ├── setup/         # Getting the session ready
-│   │   │   └── SessionSetupModal.tsx  # The first screen where you upload videos and GPS logs
+│   │   │   └── SessionSetupModal.tsx  # Setup screen (upload section)
 │   │   ├── ui/            # Reusable bits and pieces
-│   │   │   └── ModalElements.tsx      # Standardized styling so all the popups look the same
+│   │   │   └── ModalElements.tsx      # Standardized styling
 │   │   └── video/         # The media player
-│   │       └── VideoPlayer.tsx        # The custom video player that stays in sync with the map
+│   │       └── VideoPlayer.tsx        # Video staying in sync with map
 ├── index.html             # The basic HTML shell of the website
 ├── README.md              # This file!
 └── tsconfig.json          # The settings file for the code compiler
