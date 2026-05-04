@@ -27,17 +27,17 @@ any software installation.
 * **Automated Data Processing:** Instant parsing of CSV data extracted from the video,
 gps, and created annotations.
 * **Local-First Privacy:** All video and data processing occurs in the user browser.
-All of the sensitive research data never leaves the local machine.
+All of the sensitive research data never leaves the local machine. Media files are processed entirely within the client-side using Object URLS. In addition, this allows processing video and GPS data without an internet connection.
 * **Integration**: The backend logic, using Node.js and Vite, provides a foundation for
 future integration with automated AI/ML classification if needed.
 
 ## Tech Stack
-* **Framework:** React 18
+* **Framework:** React 18 + Vite
 * **Language:** TypeScript
-* **Mapping:** Leaflet & React-Leaflet
-* **Build Tool:** Vite
+* **Mapping:** Leaflet & React-Leaflet (OpenStreetMap & Esri World Imagery)
 * **Styling:** Tailwind CSS
 * **Hosting:** Vercel (connected to GitHub)
+* **Icons:** Lucide-React
 
 ## Operational Workflow (User Guide)
 Follow these steps to conduct and annotation session using the interface:
@@ -64,6 +64,19 @@ more specific information from the annotator.
     * Generate a .trips file if you would like to continue your annotations later
     - This saves all the progress you have made (just start a new session and upload the
     same videos you were working with along with this .trips file and everything will load properly
+
+## Getting Started
+To use the functioning website visit --> https://bike-annotation-app-sd-group1.vercel.app/
+
+To set up, edit, and build a version of the code -->
+1) Clone the repository
+* git clone https://github.com/theosmith02-dot/BikeAnnotationAppSDGroup1.git
+2) Install dependencies
+* npm install
+3) Start development server
+* npm run dev
+4) Build for production
+* npm run build
 
 ## Folder Structure
 Our folder layout is seen below. Follow this to find each file and exactly what function in corresponds to. Think of this as a guide for when edits are made and you need to find which file to edit.
