@@ -1,16 +1,16 @@
 
-# **TRIPS Bike Annotation Software - Senior Design Group 1**
-## Team Members:
+# **TRIPS Bike Annotation Software - University of Iowa**
+## Senior Design Group 1 - Team Members:
 * **Theo Smith (Electrical Engineering - Computer)**
 * **Jack Eyrich (Computer Science Engineering)**
 * **Anthony Roti (Electrical Engineering - Electrical)**
 ## **Sponsors:**
-* **Cara Hamann (Department of Epidemiology)**
-* **Tyler Bell (Department of Electrical and Computer Engineering)**
+* **Professor Cara Hamann (Department of Epidemiology)**
+* **Professor Tyler Bell (Department of Electrical and Computer Engineering)**
 
 ## Project Overview
-Our high-performance web application is designed for the University of Iowa TRIPS
-Lab. The primary objective was to modernize and replace the lab's bulky and outdated
+Our high-performance web application is designed for the Transportation Research and Injury Prevention Safety (TRIPS)
+Lab at the University of Iowa. The primary objective was to modernize and replace the lab's bulky and outdated
 annotation software. This software provides researchers with a streamlined, responsive
 interface that synchronizes bicycle-mounted video and GPS data. This allows for
 efficient identification and classification of bike safety events and road hazards.
@@ -19,7 +19,7 @@ efficient identification and classification of bike safety events and road hazar
 The previous C# version had a limited accesibility, low maintainability, and an
 outdated UI/UX (very rigid layout, windows widgets, etc). Our solution provides
 universal access (via any modern web browser URL), clean modular components using
-TypeScript, streamlined maintenance (instant updates via git commit/push).
+TypeScript, streamlined maintenance (instant updates via git commit/push and updated annotation saving features), and an organized folder structure.
 
 ## Key Features and Technical Highlights
 * **Web-Based Interface:** Accessible to all students and lab members without requiring
@@ -32,12 +32,14 @@ All of the sensitive research data never leaves the local machine. Media files a
 future integration with automated AI/ML classification if needed.
 
 ## Tech Stack
-* **Framework:** React 18 + Vite
-* **Language:** TypeScript
-* **Mapping:** Leaflet & React-Leaflet (OpenStreetMap & Esri World Imagery)
-* **Styling:** Tailwind CSS
-* **Hosting:** Vercel (connected to GitHub)
-* **Icons:** Lucide-React
+| Category | Technology | Purpose in TRIPS Project |
+| :--- | :--- | :--- |
+| **Framework** | React 18 | Manages multimodal sync state and component architecture. |
+| **Language** | TypeScript | Ensures data integrity for research-grade annotation exports. |
+| **Build Tool** | Vite | Modern build pipeline using Node.js |
+| **GIS / Mapping** | Leaflet | Visualizes GPS telemetry and handles spatial event marking. |
+| **UI / Styling** | Tailwind CSS | Responsive, research-grade interface design. |
+| **Deployment** | Vercel | Automated CI/CD pipeline integrated with GitHub. |
 
 ## Operational Workflow (User Guide)
 Follow these steps to conduct and annotation session using the interface:
