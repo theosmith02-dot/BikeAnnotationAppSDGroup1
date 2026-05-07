@@ -1,9 +1,9 @@
 /* -------------------------------------------------------------------------- */
 /* TRIPS Bike Annotation Software - Senior Design Group 1                     */
-/* Team Members: Theo Smith (EE), Jack Eyrich   (CSE), Anthony Roti (EE)      */
-/* Latest Revision: 4/13/2026   
-
-/* App.tsx: Main Entry Point, Global State, Video Sync, and Layout Grid       */
+/* Team Members: Theo Smith (EE), Jack Eyrich (CSE), Anthony Roti (EE)        */
+/* Latest Revision: 05/07/2026                                                */
+/* */
+/* App.tsx: Main Entry Point - Optimized 3-Row Hierarchy & State Reset        */
 /* -------------------------------------------------------------------------- */
 
 import React, { useState, useRef } from 'react';
@@ -108,10 +108,7 @@ const App: React.FC = () => {
   const saveComplexModalData = (label: string, type: AnnotationType, data: any, color: string) => {
     const context = `[W:${activeStates.weather || '?'}, P:${activeStates.path || '?'}, S:${activeStates.surface || '?'}, H:${activeStates.helmet || '?'}]`;
     
-    // Logic: Identify Top Row Label
     const row1Label = type === AnnotationType.RECKLESS ? "RECKLESS" : "CRITICAL POINT";
-    
-    // Row 2 Label: Extract specific type (Junction, Lane Change, etc.)
     const row2Label = label.replace('Critical Point - ', '').toUpperCase();
 
     let detailString = "";
@@ -137,9 +134,9 @@ const App: React.FC = () => {
         id: crypto.randomUUID(),
         timestamp: frame.timestamp,
         formattedTime: formatTime(frame.timestamp),
-        type: row1Label as any, // Row 1
-        value: row2Label,      // Row 2
-        note: `${context} ${detailString}`, // Row 3
+        type: row1Label as any, 
+        value: row2Label,      
+        note: `${context} ${detailString}`, 
         screenshot: frame.screenshot,
         color: color
       };
@@ -204,6 +201,9 @@ const App: React.FC = () => {
     if (front instanceof File) setFrontVideo({ url: URL.createObjectURL(front) });
     if (back instanceof File) setBackVideo({ url: URL.createObjectURL(back) });
     setGpsData(gps);
+    
+    // Reset state pickers to initial values for the new session
+    setActiveStates({ weather: '', path: '', surface: '', helmet: '' });
     
     if (imported && imported.length > 0) {
       setAnnotations([...imported].sort((a, b) => a.timestamp - b.timestamp));
@@ -294,9 +294,9 @@ const App: React.FC = () => {
                 id: crypto.randomUUID(), 
                 timestamp: pendingAnnotation.timestamp, 
                 formattedTime: formatTime(pendingAnnotation.timestamp), 
-                type: "GENERAL" as any, // Top Row for manual logs
-                value: pendingAnnotation.value.toUpperCase(), // Second Row
-                note: pendingNote ? `${context} ${pendingNote}` : context, // Third Row
+                type: "GENERAL" as any, 
+                value: pendingAnnotation.value.toUpperCase(), 
+                note: pendingNote ? `${context} ${pendingNote}` : context, 
                 screenshot: pendingAnnotation.screenshot, 
                 color: pendingAnnotation.color 
               };
