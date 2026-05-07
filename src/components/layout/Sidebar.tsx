@@ -9,20 +9,20 @@ import { Annotation } from '../../types';
 interface SidebarProps {
   annotations: Annotation[];
   onSeekToTime: (time: number) => void;
-  onDeleteAnnotation: (id: string) => void;
-  onEditAnnotation: (ann: Annotation) => void; // New Edit Handler
+  deleteAnnotation: (id: string) => void;
+  onEditAnnotation: (ann: Annotation) => void;
   onClose: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ 
   annotations, 
   onSeekToTime, 
-  onDeleteAnnotation, 
+  deleteAnnotation, 
   onEditAnnotation,
   onClose 
 }) => {
   
-  // Helper to map color strings to Tailwind classes based on the 2026 revision
+  // Helper to map color strings to Tailwind classes
   const getColorStyles = (color: string = 'slate') => {
     const styles: Record<string, string> = {
       red: 'border-l-red-500 border-y-slate-800 border-r-slate-800 bg-red-500/10 text-red-400',
@@ -35,8 +35,14 @@ const Sidebar: React.FC<SidebarProps> = ({
     return styles[color] || styles.slate;
   };
 
-  // Determine if an annotation is a Critical Point (and thus editable)
-  const isEditable = (value: string) => value.startsWith('Critical Point');
+  /**
+   * Determine if an annotation is editable.
+   * Now checks for CRITICAL POINT or RECKLESS types based on our 3-row hierarchy.
+   */
+  const isEditable = (ann: Annotation) => {
+    const type = String(ann.type).toUpperCase();
+    return type === 'CRITICAL POINT' || type === 'RECKLESS';
+  };
 
   return (
     <div className="w-72 border-r border-slate-800 bg-slate-900/50 flex flex-col backdrop-blur-xl shrink-0 h-full">
@@ -65,15 +71,15 @@ const Sidebar: React.FC<SidebarProps> = ({
               key={ann.id}
               onClick={() => onSeekToTime(ann.timestamp)}
               className={`group cursor-pointer p-3 bg-slate-900 rounded-xl relative transition-all hover:bg-slate-800/40 border-l-4 ${
-                ann.value === 'State Change' 
+                String(ann.type).toUpperCase() === 'STATE CHANGE' 
                   ? 'bg-indigo-500/5 border-l-slate-400 opacity-80 border-y border-r border-slate-800' 
                   : getColorStyles(ann.color)
               }`}
             >
               {/* Action Buttons Container */}
               <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                {/* Edit Button - Only for Critical Points */}
-                {isEditable(ann.value) && (
+                {/* Edit Button - Enabled for CRITICAL POINT and RECKLESS */}
+                {isEditable(ann) && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -90,7 +96,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDeleteAnnotation(ann.id);
+                    deleteAnnotation(ann.id);
                   }}
                   className="p-1.5 bg-red-500/20 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition-colors"
                   title="Delete"
@@ -101,7 +107,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Meta Info */}
               <div className="flex justify-between items-start mb-1 pr-14">
-                <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase leading-none bg-black/30`}>
+                <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase leading-none bg-black/30 text-slate-300`}>
                   {ann.type}
                 </span>
                 <span className="text-[10px] font-mono text-slate-500">
