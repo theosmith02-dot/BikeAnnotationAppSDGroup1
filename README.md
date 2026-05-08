@@ -4,7 +4,7 @@
 * **Theo Smith (Electrical Engineering - Computer)**
 * **Jack Eyrich (Computer Science Engineering)**
 * **Anthony Roti (Electrical Engineering - Electrical)**
-## **Sponsors:**
+## Sponsors:
 * **Professor Cara Hamann (Department of Epidemiology)**
 * **Professor Tyler Bell (Department of Electrical and Computer Engineering)**
 
@@ -46,11 +46,13 @@ Follow these steps to conduct and annotation session using the interface:
 
 1) **Data Ingestion / Session Setup**
  - User ID: Enter the name of the annotator
- - Upload the front/rear .mp4 video file and corresponding .gpx (or .trips) file
+ - Upload the front/rear .mp4 video file and corresponding .gpx file
+ - OPTIONAL: If you have a previously downloaded .trips file, upload this to continue your previous annotation session
  - Begin Session: System will automatically synchronize video with gps file
 
 2) **Annotation & Analysis**
 - Navigation: Use the playback controls to navigate the trip.
+- Properly input the beginning state of the rider (weather, path, surface, helmet)
 - Hazard Idenfitication: Use the critical event and reckless buttons to properly
 classify safety and hazard events.
 - Once a button is pressed a modal will appear, pausing the video and requiring
@@ -58,7 +60,7 @@ more specific information from the annotator.
 
 3) **Validation & Export**
 - Each annotation created will show up in a list generated on the left sidebar.
-- Once the annotator has reviewed through these generated events, click "EXPORT SESSION"
+- Once the annotator has reviewed through these generated events, click the three lines in the top right to select an output
 - Output:
     * Generate a CSV file and save to a location of your choice
     - This will automatically generate an xcel file with groupings of each annotation and the
@@ -66,6 +68,7 @@ more specific information from the annotator.
     * Generate a .trips file if you would like to continue your annotations later
     - This saves all the progress you have made (just start a new session and upload the
     same videos you were working with along with this .trips file and everything will load properly
+    * Once you are finished, click "new session" to begin annotating a new set of videos
 
 ## Getting Started
 To use the functioning website visit --> https://bike-annotation-app-sd-group1.vercel.app/
@@ -81,7 +84,7 @@ To set up, edit, and build a version of the code -->
 * npm run build
 
 ## Folder Structure
-Our folder layout is seen below. Follow this to find each file and exactly what function in corresponds to. Think of this as a guide for when edits are made and you need to find which file to edit.
+Our folder layout is seen below. Follow this to find each file and exactly what function in corresponds to. Think of this as a guide for when you would like to edit the software and you need to find which file corresponds to which function in the code.
 ```text
 root/
 ├── public/                
